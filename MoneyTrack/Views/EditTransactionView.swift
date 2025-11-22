@@ -42,13 +42,6 @@ struct EditTransactionView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Rectangle()
-                    .frame(width: .infinity, height: .infinity)
-                    .ignoresSafeArea()
-                    .foregroundStyle(LinearGradient(colors: [Color.white, Color.icon],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing))
-                    .opacity(0.4)
                 VStack {
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                         .padding()

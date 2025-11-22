@@ -9,7 +9,7 @@ import Foundation
 import SwiftUIFontIcon
 import SwiftUI
 
-struct Transaction: Identifiable, Decodable, Hashable, Encodable {
+struct Transaction: Identifiable, Codable, Hashable {
     var id = UUID().uuidString
     let date: String
     let institution: String
@@ -85,7 +85,7 @@ extension Category {
     static let groceries = Category(id: 501, name: "Groceries", icon: .shopping_basket, mainCategoryID: 5, color: Color(hue: 0.03, saturation: 0.59, brightness: 0.93))
     static let restaurants = Category(id: 502, name: "Restaurants", icon: .utensils, mainCategoryID: 5, color: Color(hue: 0.39, saturation: 0.45, brightness: 0.88))
     static let rent = Category(id: 601, name: "Rent", icon: .house_user, mainCategoryID: 6, color: Color(hue: 0.79, saturation: 0.61, brightness: 0.35))
-    static let homeSuplies = Category(id: 602, name: "Rent", icon: .house_user, mainCategoryID: 6, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63))
+    static let homeSuplies = Category(id: 602, name: "Home Suplies", icon: .house_user, mainCategoryID: 6, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63))
     static let paycheque = Category(id: 701, name: "Paycheque", icon: .dollar_sign, mainCategoryID: 7, color: Color(hue: 0.28, saturation: 0.59, brightness: 0.68))
     static let software = Category(id: 801, name: "Software", icon: .icons, mainCategoryID: 8, color: Color(hue: 0.12, saturation: 0.20, brightness: 0.97))
     static let creditCardPayment = Category(id: 901, name: "Credit Card Payment", icon: .exchange_alt, mainCategoryID: 9, color: Color(hue: 0.59, saturation: 0.20, brightness: 0.58))

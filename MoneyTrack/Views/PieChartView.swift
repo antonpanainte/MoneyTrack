@@ -62,7 +62,7 @@ struct PieChartView: View {
         ChartData(name: "Groceries", value: 0.0, color: Color(hue: 0.03, saturation: 0.59, brightness: 0.93)),
         ChartData(name: "Restaurants", value: 0.0, color: Color(hue: 0.39, saturation: 0.45, brightness: 0.88)),
         ChartData(name: "Rent", value: 0.0, color: Color(hue: 0.79, saturation: 0.61, brightness: 0.35)),
-        ChartData(name: "Rent", value: 0.0, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63)), // Note: This is from your 'homeSuplies' which was named "Rent"
+        ChartData(name: "Home Suplies", value: 0.0, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63)),
         ChartData(name: "Paycheque", value: 0.0, color: Color(hue: 0.28, saturation: 0.59, brightness: 0.68)),
         ChartData(name: "Software", value: 0.0, color: Color(hue: 0.12, saturation: 0.20, brightness: 0.97)),
         ChartData(name: "Credit Card Payment", value: 0.0, color: Color(hue: 0.59, saturation: 0.20, brightness: 0.58))
@@ -346,7 +346,7 @@ struct PieChartView: View {
         ChartData(name: "Groceries", value: 0.0, color: Color(hue: 0.03, saturation: 0.59, brightness: 0.93)),
         ChartData(name: "Restaurants", value: 0.0, color: Color(hue: 0.39, saturation: 0.45, brightness: 0.88)),
         ChartData(name: "Rent", value: 0.0, color: Color(hue: 0.79, saturation: 0.61, brightness: 0.35)),
-        ChartData(name: "Rent", value: 0.0, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63)),
+        ChartData(name: "Home Suplies", value: 0.0, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63)),
         ChartData(name: "Paycheque", value: 0.0, color: Color(hue: 0.28, saturation: 0.59, brightness: 0.68)),
         ChartData(name: "Software", value: 0.0, color: Color(hue: 0.12, saturation: 0.20, brightness: 0.97)),
         ChartData(name: "Credit Card Payment", value: 0.0, color: Color(hue: 0.59, saturation: 0.20, brightness: 0.58))
