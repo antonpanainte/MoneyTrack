@@ -31,8 +31,6 @@ struct ChoseCurrencyView: View {
                 }
                 .frame(width: 350)
                 .padding()
-                
-                
             }
         }
     }

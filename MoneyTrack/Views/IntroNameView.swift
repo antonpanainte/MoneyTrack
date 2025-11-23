@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct IntroNameView: View {
-    @State private var user = User(name: "", amountPreference: 0.0)
-    @State private var navigate = false
+    
     var onFinish: () -> Void
     
     @AppStorage("userName") private var userName: String = ""
@@ -35,7 +34,7 @@ struct IntroNameView: View {
                     HStack(spacing: 24) {
                         Spacer()
                         
-                        TextField("Your name", text: $user.name)
+                        TextField("Your name", text: $userName)
                             .multilineTextAlignment(.center)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 20)
@@ -43,7 +42,6 @@ struct IntroNameView: View {
                         Spacer()
                     }
                     Button("Confirm") {
-                        userName = user.name
                         onFinish()
                     }
                     .tint(Color.primary)
