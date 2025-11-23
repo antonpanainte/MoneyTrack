@@ -57,7 +57,7 @@ struct PieChartView: View {
     @State private var selectedMonth: Int = Date().getMonthInt()
     @State private var selectedYear: Int = Date().getYear()
         
-    // 2. Data sources for the pickers
+    // Data sources for the pickers
     let months = 1...12
     let years = 2000...2050
     
@@ -68,7 +68,7 @@ struct PieChartView: View {
             Calendar.current.monthSymbols
     }
         
-    // 3. Computed property for the final selected date
+    //Computed property for the final selected date
     var selectedDate: Date {
         let components = DateComponents(year: selectedYear, month: selectedMonth, day: 1)
         return Calendar.current.date(from: components) ?? Date()
@@ -129,9 +129,8 @@ struct PieChartView: View {
             }
         }
     }
-    
-    
-    // (Include the updateSelectedSlice helper function here)
+
+    //Compute the data of the selected slice
     private func updateSelectedSlice(from rawValue: Double?) {
         guard let rawValue else {
             selectedSlice = nil
