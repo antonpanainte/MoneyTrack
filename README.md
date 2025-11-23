@@ -47,6 +47,7 @@ To get a local copy up and running, follow these simple steps.
 
 * Mac running the latest macOS
 * Xcode 16.0 or later
+* Running the simulator on iOS 26+
 
 ### Installation
 
@@ -64,9 +65,10 @@ To get a local copy up and running, follow these simple steps.
 ## Roadmap
 
 - [ ] Shortcuts
-- [ ] - [ ] Home Screen Widgets
+- [ ] Home Screen Widgets
 - [ ] iCloud Sync (CloudKit)
 - [ ] Export data to CSV/PDF
+- [ ] Integration of external Exchange Rate API
 
 ---
 
