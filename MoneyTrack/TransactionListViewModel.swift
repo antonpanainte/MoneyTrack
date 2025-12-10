@@ -102,6 +102,37 @@ final class TransactionListViewModel: ObservableObject {
         return cumulativeSum
     }
     
+    func accumulateTransactionForCat(_ date1: Date, _ catID: Int) -> TransactionPrefixSum {
+        guard !transactions.isEmpty else {
+            return []
+        }
+        let today = date1
+        
+        let dateInterval = Calendar.current.dateInterval(of: .month, for: today)!
+        
+        var sum: Double = .zero
+        var cumulativeSum = TransactionPrefixSum()
+        
+
+        for date in stride(from: dateInterval.start, to: today, by: 60 * 60 * 24) {
+            let calendar = Calendar.current
+            
+            
+            let dailyExpenses = transactions.filter { transaction in
+                let transactionDate = transaction.date.dateParsed()
+                return calendar.isDate(transactionDate, inSameDayAs: date) && transaction.isExpense && transaction.categoryId == catID
+            }
+            
+            let dailyTotal = dailyExpenses.reduce(0) { $0 - $1.signedAmount }
+            
+            
+            sum += dailyTotal
+            cumulativeSum.append((date, sum))
+            
+        }
+        return cumulativeSum
+    }
+    
     //Variable which includes the path of the saved information
     private var transactionsFileURL: URL {
         let manager = FileManager.default

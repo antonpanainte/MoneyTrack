@@ -92,7 +92,7 @@ struct AddNewTransactionView: View {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button() {
                                 if let selectedCategory = Category.all.first(where: { $0.id == categoryId }),
-                                   let amountValue = Double(amount) {
+                                   let amountValue = Double(amount.replacingOccurrences(of: ",", with: ".")) {
                                     let transaction = Transaction(
                                         date: date.ISO8601Format(),
                                         institution: institution,

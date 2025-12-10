@@ -66,6 +66,7 @@ struct Category {
 }
 
 extension Category {
+    static let total = Category(id: 0, name: "Total", icon: .accusoft, color: .white)
     static let autoAndTransport = Category(id:1, name: "Auto & Transport", icon: .car_alt, color: Color(hue: 0.46, saturation: 0.85, brightness: 0.63))
     static let billsAndUtilities = Category(id:2 , name:"Bills & Utilities", icon: .file_invoice_dollar, color: Color(hue: 0.11, saturation: 0.92, brightness: 0.95))
     static let entertainment = Category(id: 3, name: "Entertainment", icon: .film, color: Color(hue: 0.03, saturation: 0.78, brightness: 0.75))

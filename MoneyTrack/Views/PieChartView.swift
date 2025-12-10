@@ -1,6 +1,7 @@
 import SwiftUI
 import Charts
 
+
 // 1. Data model for each slice
 struct ChartData: Identifiable, Equatable {
     let id = UUID()
@@ -8,33 +9,13 @@ struct ChartData: Identifiable, Equatable {
     var value: Double
     var color: Color
     
-    static let initialData: [ChartData] = [
-        // --- Main Categories ---
-        ChartData(name: "Auto & Transport", value: 0.0, color: Color(hue: 0.46, saturation: 0.85, brightness: 0.63)),
-        ChartData(name: "Bills & Utilities", value: 0.0, color: Color(hue: 0.11, saturation: 0.92, brightness: 0.95)),
-        ChartData(name: "Entertainment", value: 0.0, color: Color(hue: 0.03, saturation: 0.78, brightness: 0.75)),
-        ChartData(name: "Fees & Charges", value: 0.0, color: Color(hue: 0.57, saturation: 0.76, brightness: 0.86)),
-        ChartData(name: "Food & Dining", value: 0.0, color: Color(hue: 0.79, saturation: 0.55, brightness: 0.71)),
-        ChartData(name: "Home", value: 0.0, color: Color(hue: 0.38, saturation: 0.77, brightness: 0.68)),
-        ChartData(name: "Income", value: 0.0, color: Color(hue: 0.08, saturation: 0.73, brightness: 0.90)),
-        ChartData(name: "Shopping", value: 0.0, color: Color(hue: 0.59, saturation: 0.28, brightness: 0.50)),
-        ChartData(name: "Transfer", value: 0.0, color: Color(hue: 0.44, saturation: 0.85, brightness: 0.73)),
-        
-        // --- Subcategories ---
-        ChartData(name: "Public Transportation", value: 0.0, color: Color(hue: 0.76, saturation: 0.50, brightness: 0.68)),
-        ChartData(name: "Taxi", value: 0.0, color: Color(hue: 0.03, saturation: 0.80, brightness: 0.91)),
-        ChartData(name: "Mobile Phone", value: 0.0, color: Color(hue: 0.78, saturation: 0.26, brightness: 0.69)),
-        ChartData(name: "Movies & DVDs", value: 0.0, color: Color(hue: 0.15, saturation: 0.92, brightness: 0.95)),
-        ChartData(name: "Bank Fee", value: 0.0, color: Color(hue: 0.58, saturation: 0.42, brightness: 0.91)),
-        ChartData(name: "Finance Charge", value: 0.0, color: Color(hue: 0.56, saturation: 0.05, brightness: 0.64)),
-        ChartData(name: "Groceries", value: 0.0, color: Color(hue: 0.03, saturation: 0.59, brightness: 0.93)),
-        ChartData(name: "Restaurants", value: 0.0, color: Color(hue: 0.39, saturation: 0.45, brightness: 0.88)),
-        ChartData(name: "Rent", value: 0.0, color: Color(hue: 0.79, saturation: 0.61, brightness: 0.35)),
-        ChartData(name: "Home Suplies", value: 0.0, color: Color(hue: 0.06, saturation: 0.65, brightness: 0.63)),
-        ChartData(name: "Paycheque", value: 0.0, color: Color(hue: 0.28, saturation: 0.59, brightness: 0.68)),
-        ChartData(name: "Software", value: 0.0, color: Color(hue: 0.12, saturation: 0.20, brightness: 0.97)),
-        ChartData(name: "Credit Card Payment", value: 0.0, color: Color(hue: 0.59, saturation: 0.20, brightness: 0.58))
-    ]
+    static let initialData: [ChartData] = {
+        var tempData: [ChartData] = []
+        for data in Category.all {
+            tempData.append(ChartData(name: data.name, value:0.0, color: data.color))
+        }
+        return tempData
+    }()
 }
 
 struct PieChartView: View {
@@ -43,25 +24,36 @@ struct PieChartView: View {
     @AppStorage("selectedCurrency") private var selectedCurrency: String = ""
     
     @State private var date = Date()
-
+    
     @State private var selectedSlice: String? = nil
     @State private var selectedSliceValue: Double? = nil
     @State var selectedSliceSum: Double? = 0.0
     @State var selectedSliceSumPercentage: Double? = 0.0
+    @State var selectedCategory: Int? = 0
+    @State var nameCategory: String? = ""
     
     @State var totalExpenses: Double = 0.0
+    @State var totalCatExpenses: Double = 0.0
     @State var dailyExpenses: [(Date, Double)] = []
+    @State var categoryExpenses: [(Date, Double)] = []
     
     @State private var currentHover: (Date, Double)? = nil
     
     @State private var selectedMonth: Int = Date().getMonthInt()
     @State private var selectedYear: Int = Date().getYear()
-        
+    
     // Data sources for the pickers
     let months = 1...12
     let years = 2000...2050
     
     @State private var activeChartData: [ChartData] = ChartData.initialData
+    
+    let categoriesForPicker: [Category] = {
+        var category: [Category] = []
+        category.append(Category.total)
+        category.append(contentsOf: Category.all)
+        return category
+    }()
     
     // Helper to get the month name
     var monthSymbols: [String] {
@@ -98,10 +90,16 @@ struct PieChartView: View {
                         updateSelectedSlice(from: newValue)
                     }
                     
+                    CategoryPickerView(
+                        selectedCategory: $selectedCategory,
+                        categories: categoriesForPicker
+                    )
+                    
                     BarChartView(
-                        cData: dailyExpenses,
+                        cData: (selectedCategory == 0 ? dailyExpenses : categoryExpenses),
                         selectedCurrency: selectedCurrency,
-                        totalExpenses: totalExpenses
+                        totalExpenses: (selectedCategory == 0 ? totalExpenses : totalCatExpenses),
+                        nameCat: nameCategory ?? "Total"
                     )
                 }
             }
@@ -122,10 +120,13 @@ struct PieChartView: View {
             }
             .navigationBarTitleDisplayMode(.inline) // Changes title to inline style
             .onChange(of: selectedDate){
-                loadData(animated: true)
+                loadData(animated: true, categoryId: selectedCategory)
+            }
+            .onChange(of: selectedCategory){
+                loadData(animated: true, categoryId: selectedCategory)
             }
             .onAppear{
-                loadData(animated: true)
+                loadData(animated: true, categoryId: selectedCategory)
             }
         }
     }
@@ -148,7 +149,7 @@ struct PieChartView: View {
     }
     
     //helper function to properly load data, and potentially do it without animations
-    private func loadData(animated: Bool) {
+    private func loadData(animated: Bool, categoryId: Int? = 1) {
         let execution = {
             //For PieChart
             let data = transactionListVM.getChartDataForMonth(for: selectedDate)
@@ -163,15 +164,20 @@ struct PieChartView: View {
             //For BarChart
             dailyExpenses = transactionListVM.accumulateTransaction(selectedDate.getLastDay())
             totalExpenses = dailyExpenses.last?.1 ?? 0
+            
+            categoryExpenses = transactionListVM.accumulateTransactionForCat(selectedDate.getLastDay(), categoryId ?? 1)
+            totalCatExpenses = categoryExpenses.last?.1 ?? 0
         }
         
         //execute the data change animation
         if animated {
+            nameCategory = Category.all.first(where: { $0.id == selectedCategory})?.name ?? "Total"
             withAnimation(.easeInOut(duration: 1.0).delay(0.2)) {
                 execution()
             }
         } else {
             execution() //don't execute the animation
+            nameCategory = Category.all.first(where: { $0.id == selectedCategory})?.name ?? "Total"
         }
     }
 }
@@ -187,29 +193,47 @@ struct MonthYearPickerView : View {
     var body: some View {
         VStack {
             HStack(spacing: 0) {
-                // --- Month Picker ---
+                //Month Picker
                 Picker("Month", selection: $selectedMonth) {
                     ForEach(months, id: \.self) { month in
                         Text(monthSymbols[month - 1]).tag(month)
                     }
                 }
                 .pickerStyle(.wheel)
-                .frame(width: 165, height: 90) // Adjust width as needed
+                .frame(width: 165, height: 90)
                 
-                // --- Year Picker ---
+                //Year Picker
                 Picker("Year", selection: $selectedYear) {
                     ForEach(years, id: \.self) { year in
                         Text(String(year)).tag(year)
                     }
                 }
                 .pickerStyle(.wheel)
-                .frame(width: 165, height: 90) // Adjust width as needed
+                .frame(width: 165, height: 90)
             }
             .padding([.bottom, .horizontal])
             .background(RoundedRectangle(cornerRadius: 20).fill(Color.background))
         }
     }
 }
+
+struct CategoryPickerView : View {
+    @Binding var selectedCategory: Int?
+    var categories: [Category]?
+    
+    var body: some View {
+        VStack {
+            Picker("Category", selection: $selectedCategory) {
+                ForEach(categories ?? [], id: \.id) { cat in
+                    Text(cat.name).tag(cat.id)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(width: 340, height: 120)
+        }
+    }
+}
+
 
 struct PieChartBoxView : View {
     
@@ -240,7 +264,7 @@ struct PieChartBoxView : View {
                 GeometryReader { geometry in
                     let frame = geometry[chartProxy.plotAreaFrame]
                     VStack{
-                        if currentData.isEmpty {
+                        if currentData.isEmpty || (currentData == ChartData.initialData) {
                             Text("Select another month")
                         }
                         else {
@@ -274,6 +298,7 @@ struct BarChartView : View {
         let cData: [(Date, Double)]
         let selectedCurrency: String
         let totalExpenses: Double
+        let nameCat: String
         
         @State private var currentHover: (Date, Double)? = nil
     
@@ -284,7 +309,7 @@ struct BarChartView : View {
             let yAxisDomainTop = yAxisTop > 0 ? yAxisTop : 10 //ensure that when the data is empty, the line is at the bottom
             
             VStack(alignment: .leading) {
-                Text("Total expenses : \(totalExpenses.formatted(.currency(code: selectedCurrency)))")
+                Text("\(nameCat) expenses : \(totalExpenses.formatted(.currency(code: selectedCurrency)))")
                     .font(.title2.bold())
                 
                 Spacer(minLength: 16)
