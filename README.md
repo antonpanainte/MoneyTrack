@@ -2,7 +2,6 @@
 
 ![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)
 ![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 **MoneyTrack** is a native iOS application built with **SwiftUI** designed to help users effortlessly track daily expenses and gain insights into their spending habits through monthly category analysis.
 
@@ -74,6 +73,11 @@ To get a local copy up and running, follow these simple steps.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is proprietary software.
+
+1. You may view, clone, and download the code in this repository for educational or evaluation purposes (e.g. portfolio review).
+2. You are granted a limited license to build and execute the application on a personal device or simulator for the sole purpose of evaluating its functionality.
+3. You may NOT modify, distribute, sell, or use this code for any commercial purpose or as part of any other software project.
+4. You may NOT host this code on any other public repository.
 
 ---
